@@ -1,0 +1,19 @@
+﻿@model dynamic
+
+<div class="container">
+    <div class="row">
+        <div class="categories__slider owl-carousel">
+            @{
+                foreach (var item in Model.ChildCategory) {
+                    var img = item.Meta + ".jpg";
+                    <div class="col-lg-3">
+                        <div class="categories__item set-bg" data-setbg="../../images/categories/@img">
+                                    <h5><a asp-controller="Product" asp-action="Index" , asp-route-meta="@item.Meta">@item.Name</a></h5>
+                                </div>
+                            </div>
+                }
+            }
+            
+        </div>
+    </div>
+</div>

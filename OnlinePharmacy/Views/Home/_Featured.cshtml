@@ -1,0 +1,56 @@
+﻿@model dynamic
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section-title">
+                <h2>Sản phẩm nổi bật</h2>
+            </div>
+            <div class="featured__controls">
+                <ul>
+                    <li class="active" data-filter="*">All</li>
+                    @{
+                        foreach(var pc in Model.ProductCategory) {
+                            if(pc.ParentId != 0) {
+                                    <li data-filter=".@SupFunc.ConvertToFormat(pc.Name)">@pc.Name</li>
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row featured__filter">
+        @{
+            foreach (var item in Model.Products)
+            {
+                var catName = "";
+                foreach (var cat in Model.ProductCategory) {
+                    if(cat.Id == item.CategoryId) {
+                        catName = SupFunc.ConvertToFormat(cat.Name);
+                    }
+                }
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix @catName">
+                        <div class="featured__item">
+                                <div class="featured__item__pic set-bg" data-setbg="../../images/product/@item.Image">
+                                    <ul class="featured__item__pic__hover">
+                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="featured__item__text">
+                            @{
+                                var name = item.Name;
+                                if(name.Length > 60) {
+                                    name = name.Substring(0, 60).Insert(60, "...");
+                                }
+                            }
+                            <h6><a asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-meta="@catName" asp-route-id="@item.Id" asp-route-name="@SupFunc.ConvertToFormat(item.Name)">@name</a></h6>
+                                <h5>@string.Format("{0:#.000}", Convert.ToDecimal(item.Price) / 1000) đ</h5>
+                                </div>
+                        </div>
+                    </div>
+            }
+            
+        }
+    </div>
+</div>

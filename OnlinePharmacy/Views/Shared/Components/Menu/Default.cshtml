@@ -1,0 +1,26 @@
+﻿@model IEnumerable<OnlinePharmacy.Models.Menu>
+<ul>
+    @{
+        foreach (var item in Model.Where(s => s.ParentId == 0))
+        {
+                    <li>
+                        @if(item.Type != "Product") {
+                            <a asp-area="" asp-controller="@item.Type" asp-action="Index">@item.Title</a>
+                        }
+                        else {
+                            <a asp-area="" asp-controller="@item.Type" asp-action="Index" , asp-route-meta="@item.Meta">@item.Title</a>
+
+                        }
+                        @if (Model.Where(s => s.ParentId == item.Id).Count() != 0)
+                            {
+                            <ul class="header__menu__dropdown">
+                                @foreach (var childItem in Model.Where(s => s.ParentId == item.Id).ToList())
+                        {
+                                    <li><a asp-area="" asp-controller="Product" asp-action="Index" , asp-route-meta="@childItem.Meta">@childItem.Title</a></li>
+                        }
+                            </ul>
+                        }
+                    </li>
+        }
+    }
+</ul>
