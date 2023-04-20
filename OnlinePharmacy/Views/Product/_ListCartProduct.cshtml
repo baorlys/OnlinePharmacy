@@ -1,0 +1,9 @@
+﻿@model List<OnlinePharmacy.Models.CartItem>
+@{
+}
+<ul>
+    @foreach (var cartItem in Model){
+        var thanhtien = cartItem.quantity * Int32.Parse(cartItem.product.Price);
+        <li>@cartItem.product.Name.Substring(0,10) ... <span>@cartItem.quantity </span> <span>@Convert.ToDecimal(thanhtien).ToString("n0")</span></li>
+    }
+</ul>

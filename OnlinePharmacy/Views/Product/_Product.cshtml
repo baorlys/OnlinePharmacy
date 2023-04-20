@@ -26,13 +26,22 @@
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="../../images/product/@item.Image">
                         <ul class="product__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                            <li>
+                                @{
+                                    if (item.Inventory > 0)
+                                    {
+                                        <a asp-controller="Product" asp-action="AddToCart" asp-route-productId="@item.Id"><i class="fa fa-shopping-cart"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-danger">Hết hàng</button>
+                                    }
+                                }
+                            </li>
                         </ul>
                     </div>
                     <div class="product__item__text">
-                        <h6><a asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-meta="@Model.Cat.Meta" asp-route-id="@item.Id" asp-route-name="@SupFunc.ConvertToFormat(item.Name)">@item.Name</a></h6>
+                        <h6><a asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-metaCat="@Model.Cat.Meta" asp-route-metaProduct="@item.Meta" >@item.Name</a></h6>
                         <h5>@string.Format("{0:#.000}", Convert.ToDecimal(item.Price) / 1000) đ</h5>
                     </div>
                 </div>

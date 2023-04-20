@@ -1,0 +1,132 @@
+﻿@model IEnumerable<OnlinePharmacy.Models.Blog>
+@{
+	ViewData["Title"] = "Quản lý Bài viết";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/extra-libs/multicheck/multicheck.css" />
+	<link href="~/admin/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css"
+	  rel="stylesheet" />
+}
+
+<div class="page-wrapper">
+
+	<div class="page-breadcrumb">
+		<div class="row">
+			<div class="col-12 d-flex no-block align-items-center">
+				<h4 class="page-title">@ViewData["Title"]</h4>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-12">
+
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Danh sách</h5>
+
+
+
+
+						<div class="table-responsive">
+							<div class="container-fluid">
+								<div class="d-flex justify-content-between mb-2">
+									<div>
+									</div>
+									<div>
+										@Html.NoEncodeActionLink(
+										" <span class='mdi mdi-plus'>Thêm mới</span>",
+										"Create",
+										"Blogs",
+										"Admin",
+										null,
+										new { @class = "btn btn-primary" })
+									</div>
+								</div>
+									
+							</div>
+							
+							<table id="zero_config"
+								   class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>STT</th>
+										<th>Tên</th>
+										<th>Tác giả</th>
+										<th>Tóm tắt</th>
+										<th>Thao tác</th>
+									</tr>
+								</thead>
+								<tbody>
+									@{var stt = 1;}
+									@foreach (var item in Model)
+									{
+										<tr>
+											<td>@Html.Raw(stt++)</td>
+											<td>
+												@Html.DisplayFor(modelItem => item.Title)
+											</td>
+											<td>
+												@Html.DisplayFor(modelItem => item.Author)
+											</td>
+											<td>
+												@Html.DisplayFor(modelItem => item.Summary)
+											</td>
+											<td class="nowrap">
+												@Html.NoEncodeActionLink(
+											"<span class='mdi mdi-details'></span>",
+											"Details",
+											"Blogs",
+											"Admin",
+											new {id = @item.Id},
+											new { @class = "btn btn-info" })
+												@Html.NoEncodeActionLink(
+											"<span class='mdi mdi-table-edit'></span>",
+											"Edit",
+											"Blogs",
+											"Admin",
+											new {id = @item.Id},
+											new { @class = "btn btn-warning" })
+
+											
+
+												@Html.NoEncodeActionLink(
+											"<span class='mdi mdi-delete'></span>",
+											"Delete",
+											"Blogs",
+											"Admin",
+											new {id = @item.Id},
+											new { @class = "btn btn-danger" })
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+@section Scripts {
+	<script src="~/admin/assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+	<script src="~/admin/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+	<script src="~/admin/assets/extra-libs/DataTables/datatables.min.js"></script>
+	<script>
+		/****************************************
+		 *       Basic Table                   *
+		 ****************************************/
+		$("#zero_config").DataTable();
+	</script>
+}

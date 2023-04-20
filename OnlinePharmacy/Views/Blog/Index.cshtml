@@ -42,11 +42,11 @@
                                         <ul>
                                             <li><i class="fa fa-calendar-o"></i>@item.CreateAt.ToLongDateString()</li>
                                         </ul>
-                                        <h5><a asp-controller="Blog" asp-action="BlogDetail" , asp-route-id="@item.Id">@item.Title</a></h5>
+                                        <h5><a asp-controller="Blog" asp-action="BlogDetail" , asp-route-meta="@item.Meta">@item.Title</a></h5>
                                         <p>
                                             @item.Summary
                                         </p>
-                                        <a asp-controller="Blog" asp-action="BlogDetail" , asp-route-id="@item.Id" class="blog__btn">Đọc thêm<span class="arrow_right"></span></a>
+                                        <a asp-controller="Blog" asp-action="BlogDetail" , asp-route-meta="@item.Meta" class="blog__btn">Đọc thêm<span class="arrow_right"></span></a>
                                     </div>
                                 </div>
                             </div>

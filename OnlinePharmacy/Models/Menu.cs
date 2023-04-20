@@ -9,9 +9,9 @@ public partial class Menu
 
     public int? ParentId { get; set; }
 
-    public string? Type { get; set; }
+    public string Type { get; set; } = null!;
 
-    public string? Title { get; set; }
+    public string Title { get; set; } = null!;
 
     public string? Description { get; set; }
 
@@ -19,9 +19,9 @@ public partial class Menu
 
     public string? Meta { get; set; }
 
-    public bool? Hide { get; set; }
+    public bool Hide { get; set; }
 
-    public int? Order { get; set; }
+    public int Order { get; set; }
 
     public DateTime? CreateAt { get; set; }
 

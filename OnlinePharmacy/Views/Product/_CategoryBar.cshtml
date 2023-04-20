@@ -5,7 +5,7 @@
         
         @{
             foreach(var item in Model.ChildCategory) {
-                <li><a asp-controller="Product" asp-action="Index" , asp-route-meta="@item.Meta">@item.Name</a></li>
+                <li><a asp-controller="Product" asp-action="Index" asp-route-metaCat="@item.Meta">@item.Name</a></li>
             }
         }
     </ul>

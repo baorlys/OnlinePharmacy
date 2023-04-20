@@ -1,0 +1,180 @@
+﻿@model dynamic
+@{
+	var Blog = Model.Blog;
+	var BlogTags = Model.BlogTags;
+	var tags = "";
+	for (var i = 0; i < BlogTags.Count; i++)
+	{
+		tags += BlogTags[i].Name + ", ";
+	}
+	tags = tags.Substring(0, tags.Length - 2);
+}
+@{
+	ViewData["Title"] = "Xoá";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+	<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+	<script src="js/elfinder.min.js"></script>
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/select2/dist/css/select2.min.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/quill/dist/quill.snow.css" />
+}
+	<div class="page-wrapper">
+		<div class="page-breadcrumb">
+			<div class="row">
+				<div class="col-12 d-flex no-block align-items-center">
+					<h4 class="page-title">@ViewData["Title"]</h4>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="col-md-6">
+				<div class="card">
+					<h3>Bạn có muốn xoá bài viết này không ?</h3>
+					<div class="card-body">
+						<h5 class="card-title">Blog @Blog.Id</h5>
+						<div class="form-group row">
+							<label class="col-md-3" for="title">Tiêu đề</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="title"
+								   class="form-control"
+								   placeholder="@Blog.Title"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="author">Tác giả</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="author"
+								   class="form-control"
+								   placeholder="@Blog.Author"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="content">Nội dung</label>
+							<div class="col-md-9">
+								<textarea id="content"
+									  class="form-control"
+									  disabled
+									  rows="5"
+									  placeholder="@Blog.Content"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="thumb">Ảnh thumb</label>
+							<div class="col-md-9">
+								<img src="~/images/blog/@Blog.Thumb" style="width:300px" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="tags">Tags</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="tags"
+								   class="form-control"
+								   style="height:auto"
+								   placeholder="@tags"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-2">
+								@Html.NoEncodeActionLink(
+							"<span class='mdi mdi-arrow-left-bold'>Trở lại</span>",
+							"Index",
+							"Blogs",
+							"Admin",
+							null,
+							new { @class = "btn btn-primary" })
+							</div>
+							<div class="col-md-2">
+								<form asp-action="Delete">
+									<input type="hidden" name="Id" value="@Blog.Id" />
+									<input type="submit" value="Xác nhận" class="btn btn-danger" /> 
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+
+
+	</div>
+
+	@section Scripts {
+	<script src="~/admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+	<script src="~/admin/dist/js/pages/mask/mask.init.js"></script>
+	<script src="~/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
+	<script src="~/admin/assets/libs/select2/dist/js/select2.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js"></script>
+	<script src="~/admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
+	<script src="~/admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="~/admin/assets/libs/quill/dist/quill.min.js"></script>
+	<script>
+		//***********************************//
+		// For select 2
+		//***********************************//
+		$(".select2").select2();
+
+		/*colorpicker*/
+		$(".demo").each(function () {
+			//
+			// Dear reader, it's actually very easy to initialize MiniColors. For example:
+			//
+			//  $(selector).minicolors();
+			//
+			// The way I've done it below is just for the demo, so don't get confused
+			// by it. Also, data- attributes aren't supported at this time...they're
+			// only used for this demo.
+			//
+			$(this).minicolors({
+				control: $(this).attr("data-control") || "hue",
+				position: $(this).attr("data-position") || "bottom left",
+
+				change: function (value, opacity) {
+					if (!value) return;
+					if (opacity) value += ", " + opacity;
+					if (typeof console === "object") {
+						console.log(value);
+					}
+				},
+				theme: "bootstrap",
+			});
+		});
+		/*datwpicker*/
+		jQuery(".mydatepicker").datepicker();
+		jQuery("#datepicker-autoclose").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+		});
+		var quill = new Quill("#editor", {
+			theme: "snow",
+		});
+	</script>
+	}
+
+
+

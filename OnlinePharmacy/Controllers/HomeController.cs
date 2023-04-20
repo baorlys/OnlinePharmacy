@@ -43,6 +43,7 @@ namespace OnlinePharmacy.Controllers
             return products.ToList();
         }
 
+
         public List<ProductCategory> GetProductCategory()
         {
             var categories = from pc in _db.ProductCategories
@@ -60,9 +61,11 @@ namespace OnlinePharmacy.Controllers
 
         public List<Blog> GetBlogs()
         {
-            var blogs = from b in _db.Blogs
-                        select b;
-            return blogs.ToList();
+            var blogs = _db.Blogs
+                     .OrderByDescending(x => x.Id)
+                     .Take(6)
+                     .ToList();
+            return blogs;
         }
 
 

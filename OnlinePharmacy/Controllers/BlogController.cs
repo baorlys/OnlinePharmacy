@@ -13,7 +13,6 @@ namespace OnlinePharmacy.Controllers
         {
             _logger = logger;
         }
-
         [Route("bai-viet")]
         public IActionResult Index()
         {
@@ -31,11 +30,11 @@ namespace OnlinePharmacy.Controllers
             return View(model);
         }
 
-
-        public IActionResult BlogDetail(int id)
+        [Route("bai-viet/{meta}")]
+        public IActionResult BlogDetail(string meta)
         {
             dynamic model = new ExpandoObject();
-            var blog = GetBlogById(id);
+            var blog = GetBlogByMeta(meta);
             model.Blog = blog;
             model.Blogs = GetBlogs();
             model.BlogTags = GetBlogTagsOfId(blog.Tags);
@@ -64,8 +63,15 @@ namespace OnlinePharmacy.Controllers
             return blog.FirstOrDefault();
         }
 
+        public Blog GetBlogByMeta(string meta)
+        {
+            var blog = _db.Blogs.Single(x => x.Meta == meta);
+            return blog;
+        }
+
         public List<BlogTag> GetBlogTagsOfId(string tags)
         {
+            if (string.IsNullOrEmpty(tags)) return null;
             var temp = tags.Split(",").Select(Int32.Parse).ToList(); ;
             var blogTags = from bt in _db.BlogTags
                            where temp.Contains((int)bt.Id)

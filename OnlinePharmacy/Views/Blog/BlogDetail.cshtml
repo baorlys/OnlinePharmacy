@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "BlogDetail";
+    ViewData["Title"] = "Bài viết";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
@@ -44,7 +44,12 @@
                 <div class="col-lg-8 col-md-7 order-md-1 order-1">
                     <div class="blog__details__text">
                         <img src="~/images/blog/@blog.Thumb" alt="">
-                        <p>@blog.Content</p>
+                    @using MarkdownSharp
+                    @{
+                        var markdown = new Markdown();
+                        string htmlContent = markdown.Transform(blog.Content);
+                    }
+                    @Html.Raw(htmlContent)
                     </div>
                     <div class="blog__details__content">
                         <div class="row">

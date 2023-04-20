@@ -1,0 +1,197 @@
+﻿@model OnlinePharmacy.Models.Menu
+@{
+	ViewData["Title"] = "Chỉnh sửa";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@section Head{
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
+
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/quill/dist/quill.snow.css" />
+}
+	<div class="page-wrapper">
+		<div class="page-breadcrumb">
+			<div class="row">
+				<div class="col-12 d-flex no-block align-items-center">
+					<h4 class="page-title">@ViewData["Title"]</h4>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<form asp-action="Edit" method="post" enctype="multipart/form-data">
+							<h5 class="card-title">Menu</h5>
+							<input type="text"
+							   asp-for="Id"
+							   id="id"
+							   class="form-control"
+							   value="@Model.Id" hidden />
+							<input type="text"
+							   asp-for="Type"
+							   id="type"
+							   class="form-control"
+							   value="@Model.Type" hidden />
+							<input type="text"
+							   asp-for="Order"
+							   id="order"
+							   class="form-control"
+							   value="@Model.Order" hidden />
+
+							<div class="form-group row">
+								<label class="col-md-3" for="title">Tiêu đề</label>
+								<div class="col-md-9">
+									<input type="text"
+									   asp-for="Title"
+									   id="title"
+									   class="form-control"
+									   value="@Model.Title" />
+								</div>
+								<span asp-validation-for="Title" class="text-danger"></span>
+							</div>
+							<div class="form-group row">
+								<label class="col-md-3" for="meta">Meta</label>
+								<div class="col-md-9">
+									<input type="text"
+									   asp-for="Meta"
+									   id="meta"
+									   class="form-control"
+									   value="@Model.Meta"
+									   disable />
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-3" for="summary">Mô tả</label>
+								<div class="col-md-9">
+									<textarea asp-for="Description"
+										  id="summary"
+										  class="form-control"
+										  row="2"
+										  value="@Model.Description"></textarea>
+								</div>
+								<span asp-validation-for="Description" class="text-danger"></span>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-3" for="hide">Ẩn</label>
+								<div class="col-md-9">
+								@if (Model.Hide)
+								{
+									<input type="checkbox" class="form-check-input" id="checkHide" name="checkHide" value="true" checked>
+								}
+								else
+								{
+									<input type="checkbox" class="form-check-input" id="checkHide" name="checkHide" value="true">
+								}
+							</div>
+						</div>
+
+
+
+
+						<input type="text"
+							   asp-for="CreateAt"
+							   id="createAt"
+							   class="form-control"
+							   value="@Model.CreateAt" hidden />
+
+						<input type="text"
+							   asp-for="ModifiedAt"
+							   id="modifiedAt"
+							   class="form-control"
+							   value="@DateTime.Now" hidden />
+						<div class="form-group row">
+
+							<div class="col-md-2">
+								@Html.NoEncodeActionLink(
+								"<span class='mdi mdi-arrow-left-bold'>Trở lại</span>",
+								"Index",
+								"Blogs",
+								"Admin",
+								null,
+								new { @class = "btn btn-primary" })
+							</div>
+							<div class="col-md-2">
+								<input type="submit" value="Chỉnh sửa" class="btn btn-primary" />
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+</div>
+
+@section Scripts {
+	<script src="~/admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+	<script src="~/admin/dist/js/pages/mask/mask.init.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
+
+	<script src="~/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
+	<script src="~/admin/assets/libs/select2/dist/js/select2.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js"></script>
+	<script src="~/admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
+	<script src="~/admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="~/admin/assets/libs/quill/dist/quill.min.js"></script>
+	<script>
+
+
+
+
+		function removeVietnameseAccent(str) {
+			if (!str) return str;
+			str = str.toLowerCase();
+			str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, 'a');
+			str = str.replace(/[éèẻẽẹêếềểễệ]/g, 'e');
+			str = str.replace(/[iíìỉĩị]/g, 'i');
+			str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, 'o');
+			str = str.replace(/[úùủũụưứừửữự]/g, 'u');
+			str = str.replace(/[ýỳỷỹỵ]/g, 'y');
+			str = str.replace(/đ/g, 'd');
+			return str;
+		}
+		$(function () {
+			$("#title").keyup(function () {
+				var text = $.trim($(this).val())
+				text = removeVietnameseAccent(text);
+				var textCreate = text.replace(/\s+/g, '-').toLowerCase();
+				document.getElementById("meta").value = textCreate;
+				$("#meta").val(textCreate)
+			}).keyup()
+		})
+
+		//***********************************//
+		// For select 2
+		//***********************************//
+		$(".select2").select2();
+
+
+
+	</script>
+	}
+
+
+

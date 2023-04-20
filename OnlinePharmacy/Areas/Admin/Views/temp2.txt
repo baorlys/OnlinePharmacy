@@ -1,0 +1,110 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Quản lý Bài viết";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+    <link rel="stylesheet"
+      type="text/css"
+      href="~/admin/assets/libs/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+      type="text/css"
+      href="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.css" />
+    <link rel="stylesheet"
+      type="text/css"
+      href="~/admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet"
+      type="text/css"
+      href="~/admin/assets/libs/quill/dist/quill.snow.css" />
+}
+<div class="page-wrapper">
+	<!-- ============================================================== -->
+	<!-- Bread crumb and right sidebar toggle -->
+	<!-- ============================================================== -->
+	<div class="page-breadcrumb">
+		<div class="row">
+			<div class="col-12 d-flex no-block align-items-center">
+				<h4 class="page-title">@ViewData["Title"]</h4>
+				
+			</div>
+		</div>
+	</div>
+	<!-- ============================================================== -->
+	<!-- End Bread crumb and right sidebar toggle -->
+	<!-- ============================================================== -->
+	<!-- ============================================================== -->
+	<!-- Container fluid  -->
+	<!-- ============================================================== -->
+	<div class="container-fluid">
+		<div class="card">
+                <div class="card-body">
+                   
+	            </div>
+        </div>
+    </div>
+
+		
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/admin/dist/js/pages/mask/mask.init.js"></script>
+    <script src="~/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
+    <script src="~/admin/assets/libs/select2/dist/js/select2.min.js"></script>
+    <script src="~/admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js"></script>
+    <script src="~/admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js"></script>
+    <script src="~/admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
+    <script src="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
+    <script src="~/admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/admin/assets/libs/quill/dist/quill.min.js"></script>
+    <script>
+        //***********************************//
+        // For select 2
+        //***********************************//
+        $(".select2").select2();
+
+        /*colorpicker*/
+        $(".demo").each(function () {
+            //
+            // Dear reader, it's actually very easy to initialize MiniColors. For example:
+            //
+            //  $(selector).minicolors();
+            //
+            // The way I've done it below is just for the demo, so don't get confused
+            // by it. Also, data- attributes aren't supported at this time...they're
+            // only used for this demo.
+            //
+            $(this).minicolors({
+                control: $(this).attr("data-control") || "hue",
+                position: $(this).attr("data-position") || "bottom left",
+
+                change: function (value, opacity) {
+                    if (!value) return;
+                    if (opacity) value += ", " + opacity;
+                    if (typeof console === "object") {
+                        console.log(value);
+                    }
+                },
+                theme: "bootstrap",
+            });
+        });
+        /*datwpicker*/
+        jQuery(".mydatepicker").datepicker();
+        jQuery("#datepicker-autoclose").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+        });
+        var quill = new Quill("#editor", {
+            theme: "snow",
+        });
+    </script>
+}
+
+
+

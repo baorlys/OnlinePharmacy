@@ -1911,7 +1911,8 @@ ol {
 	border-bottom: 1px solid #ebebeb;
 }
 
-.shoping__cart__table table tbody tr td.shoping__cart__item {
+.shoping__cart__table table tbody tr td.
+{
 	width: 630px;
 	text-align: left;
 }
@@ -3470,4 +3471,8 @@ ol {
 /*My css*/
 .blog__sidebar__recent__item__pic img {
 	width: 70px;
+}
+
+.shoping__cart__item img {
+	width: 100px;
 }

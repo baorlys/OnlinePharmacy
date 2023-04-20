@@ -1,0 +1,164 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Thanh toán";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+    decimal total = 0;
+    int stt = 1;
+}
+
+@model OnlinePharmacy.Models.Customer
+
+@{
+    var cart = ViewBag.Cart;
+}
+
+
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="../../images/breadcrumb.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Thanh toán</h2>
+                    <div class="breadcrumb__option">
+                        <a href="/">Trang chủ</a>
+                        <span>Thanh toán</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="header__cart">
+            <ul>
+                <li><a asp-controller="Product" asp-action="Cart"><i class="fa fa-shopping-bag"></i>Quay lại giỏ hàng</a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <h4 style="font-weight:bold">Danh sách sản phẩm</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="shoping__product">Sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                                <th>Giá thành</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cartItem in cart)
+                            {
+                                var thanhtien = cartItem.quantity * Int32.Parse(cartItem.product.Price);
+                                total += thanhtien;
+                                <tr>
+                                    <td>@(stt++)</td>
+                                    <td class="shoping__cart__item">
+                                        <img src="~/images/product/@cartItem.product.Image" alt="">
+                                        <h5>@cartItem.product.Name</h5>
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                        @Convert.ToDecimal(cartItem.product.Price).ToString("n0") đ
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div>
+                                                <input style="width:120px" class="quantity" type="text" value="@cartItem.quantity" disabled />
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total">
+                                        @Convert.ToDecimal(thanhtien).ToString("n0") đ
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout__form">
+            <h4>Thông tin người mua</h4>
+            <form asp-action="Checkout">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Tên<span>*</span></p>
+                                    <input type="text" asp-for="Name">
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Số điện thoại<span>*</span></p>
+                                    <input type="text" asp-for="Phone">
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Email<span>*</span></p>
+                                    <input type="text" asp-for="Email">
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Địa chỉ<span>*</span></p>
+                            <input type="text" class="checkout__input__add" asp-for="Address">
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Phương thức thanh toán<span>*</span></p>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="cash-card" value="cash-card" checked>
+                            <label class="form-check-label" for="credit-card">
+                                Thanh toán tiền mặt khi nhận hàng
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="momo-card" value="momo-card">
+                            <label class="form-check-label" for="debit-card">
+                                Thanh toán qua Momo
+                            </label>
+                        </div>
+
+                        <!-- other radio buttons -->
+
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            @{
+                                var session = HttpContextAccessor.HttpContext.Session;
+                                string jsoncart = session.GetString(OnlinePharmacy.Controllers.ProductController.CARTKEY);
+                            }
+                            <div class="checkout__order__total">Tổng tiền <span>@session.GetString("total")</span></div>
+                           
+                            <button type="submit" class="site-btn">Đặt hàng</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->

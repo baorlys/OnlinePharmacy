@@ -21,7 +21,10 @@
                             <ul>
                                 <li><i class="fa fa-calendar-o"></i>@blog.CreateAt.ToLongDateString()</li>
                             </ul>
-                            <h5><a href="#">@blog.Title</a></h5>
+                            <h5>
+                                <a asp-controller="Blog" asp-action="BlogDetail" asp-route-meta="@blog.Meta">@blog.Title</a>
+
+                </h5>
                             <p>@blog.Summary</p>
                         </div>
                     </div>

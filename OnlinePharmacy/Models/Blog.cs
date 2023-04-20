@@ -9,6 +9,8 @@ public partial class Blog
 
     public string? Title { get; set; }
 
+    public string? Meta { get; set; }
+
     public string? Author { get; set; }
 
     public string? Content { get; set; }

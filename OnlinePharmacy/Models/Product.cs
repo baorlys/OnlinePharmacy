@@ -11,6 +11,10 @@ public partial class Product
 
     public string? Name { get; set; }
 
+    public string? Meta { get; set; }
+
+    public int? Inventory { get; set; }
+
     public string? Desc { get; set; }
 
     public string? Image { get; set; }
@@ -27,5 +31,5 @@ public partial class Product
 
     public virtual ProductCategory? Category { get; set; }
 
-    public virtual ProductInventory? ProductInventory { get; set; }
+    public virtual ICollection<OrderDetail> OrderDetails { get; } = new List<OrderDetail>();
 }

@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    string jsoncart = session.GetString(OnlinePharmacy.Controllers.ProductController.CARTKEY);
+    if (jsoncart != null)
+    {
+        <div class="header__cart__price">giỏ: <span>@session.GetString("total")</span></div>
+
+    }
+}
