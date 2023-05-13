@@ -1,10 +1,10 @@
-﻿@model OnlinePharmacy.Models.Order
+﻿@model OnlinePharmacy.Models.Product
+
 @{
-	ViewData["Title"] = "Xử lí đơn hàng";
+	ViewData["Title"] = "Xoá";
 	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
-	var orderDetail = ViewBag.orderDetail;
-	int stt = 1;
 }
+
 @section Head{
 	<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
 	<script src="js/elfinder.min.js"></script>
@@ -21,45 +21,6 @@
 	  type="text/css"
 	  href="~/admin/assets/libs/quill/dist/quill.snow.css" />
 }
-	<style>
-		table {
-			border-collapse: collapse;
-			width: 100%;
-			font-family: Arial, sans-serif;
-		}
-
-		th, td {
-			text-align: left;
-			padding: 8px;
-		}
-
-		th {
-			background-color: #f2f2f2;
-		}
-
-		tr:nth-child(even) {
-			background-color: #f2f2f2;
-		}
-
-		h5 {
-			margin: 0;
-			font-size: 16px;
-			font-weight: bold;
-		}
-
-		table input[type="text"] {
-			border: none;
-			text-align: center;
-			font-size: 16px;
-			font-weight: bold;
-			width: 50px;
-			background-color: transparent;
-		}
-
-			table input[type="text"]:disabled {
-				color: #999;
-			}
-	</style>
 	<div class="page-wrapper">
 		<div class="page-breadcrumb">
 			<div class="row">
@@ -73,98 +34,103 @@
 		<div class="container-fluid">
 			<div class="col-md-6">
 				<div class="card">
-					<h3>Xác nhận đơn hàng</h3>
+					<h3>Bạn có muốn xoá sản phẩm này không ?</h3>
 					<div class="card-body">
-						<h5 class="card-title">Đơn hàng @Model.Id</h5>
+						<h5 class="card-title">Sản phẩm @Model.Id</h5>
 						<div class="form-group row">
-							<label class="col-md-3" for="title">Khách hàng</label>
+							<label class="col-md-3" for="id">Tên</label>
 							<div class="col-md-9">
 								<input type="text"
-								   id="title"
+								   id="id"
 								   class="form-control"
-								   placeholder="@Model.Customer.Name"
+								   placeholder="@Model.Name"
 								   disabled />
 							</div>
 						</div>
 						<div class="form-group row">
-							<label class="col-md-3" for="title">Địa chỉ</label>
+							<label class="col-md-3" for="category">Loại</label>
 							<div class="col-md-9">
 								<input type="text"
-								   id="title"
+								   id="category"
 								   class="form-control"
-								   placeholder="@Model.ShippingAddress"
+								   placeholder="@Model.Category.Name"
 								   disabled />
 							</div>
 						</div>
 						<div class="form-group row">
-							<h4 style="font-weight:bold">Danh sách sản phẩm</h4>
-							<table>
-								<thead>
-									<tr>
-										<th>#</th>
-										<th>Mã sản phẩm</th>
-										<th>Số lượng</th>
-									</tr>
-								</thead>
-								<tbody>
-								@foreach (var detail in orderDetail)
-								{
-									<tr>
-										<td>@(stt++)</td>
-										<td>
-											<h5>@detail.ProductId</h5>
-										</td>
-										<td>
-											<div>
-												<div>
-													<input type="text" value="@detail.Quantity" disabled />
-												</div>
-											</div>
-										</td>
-									</tr>
-
-								}
-							</tbody>
-						</table>
-					</div>
-
-					<div class="form-group row">
-						<div class="col-md-2">
-							@Html.NoEncodeActionLink(
+							<label class="col-md-3" for="inventory">Tồn kho</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="inventory"
+								   class="form-control"
+								   placeholder="@Model.Inventory"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="desc">Giới thiệu</label>
+							<div class="col-md-9">
+								<textarea id="desc"
+									  class="form-control"
+									  rows="5">@Model.Desc</textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="image">Ảnh</label>
+							<div class="col-md-9">
+								<img src="~/images/product/@Model.Image" style="width:300px" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="price">Giá</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="price"
+								   class="form-control"
+								   placeholder="@Model.Price"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="unit">Đơn vị bán</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="unit"
+								   class="form-control"
+								   placeholder="@Model.Unit"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-2">
+								@Html.NoEncodeActionLink(
 							"<span class='mdi mdi-arrow-left-bold'>Trở lại</span>",
 							"Index",
-							"Orders",
+							"Products",
 							"Admin",
 							null,
-							new { @class = "btn btn-warning" })
+							new { @class = "btn btn-primary" })
+							</div>
+							<div class="col-md-2">
+								<form asp-action="Delete">
+									<input type="hidden" name="Id" value="@Model.Id" />
+									<input type="submit" value="Xác nhận" class="btn btn-danger" />
+								</form>
+							</div>
 						</div>
-						<div class="col-md-2">
-							<form asp-action="Accept">
-								<input type="hidden" name="Id" value="@Model.Id" />
-								<input type="submit" value="Xác nhận" class="btn btn-success" />
-							</form>
-						</div>
-						<div class="col-md-2">
-							<form asp-action="Cancel">
-								<input type="hidden" name="Id" value="@Model.Id" />
-								<input type="submit" value="Huỷ" class="btn btn-danger" />
-							</form>
-						</div>
-
 					</div>
+
 				</div>
 
 			</div>
 
 		</div>
 
+
+
 	</div>
 
-
-
-</div>
-
-@section Scripts {
+	@section Scripts {
 	<script src="~/admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 	<script src="~/admin/dist/js/pages/mask/mask.init.js"></script>
 	<script src="~/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>

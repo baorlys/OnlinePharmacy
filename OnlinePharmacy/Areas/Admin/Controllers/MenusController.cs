@@ -12,7 +12,7 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
 
-    public class MenusController : Controller
+    public class MenusController : AdminBaseController
     {
         private readonly OnlinePharmacyContext _context;
 

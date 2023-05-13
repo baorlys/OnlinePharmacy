@@ -31,6 +31,8 @@ public partial class OnlinePharmacyContext : DbContext
 
     public virtual DbSet<ProductCategory> ProductCategories { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=OnlinePharmacy;Trusted_Connection=True;Encrypt=false");
@@ -114,11 +116,13 @@ public partial class OnlinePharmacyContext : DbContext
 
         modelBuilder.Entity<Menu>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3213E83F2E47EA61");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3213E83FCD0C689F");
 
             entity.ToTable("Menu");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.CreateAt)
                 .HasColumnType("datetime")
                 .HasColumnName("create_at");
@@ -168,11 +172,13 @@ public partial class OnlinePharmacyContext : DbContext
             entity.Property(e => e.PaymentMethod)
                 .HasMaxLength(50)
                 .HasColumnName("paymentMethod");
-            entity.Property(e => e.PaymentStatus).HasColumnName("paymentStatus");
             entity.Property(e => e.ShippingAddress).HasColumnName("shippingAddress");
             entity.Property(e => e.ShippingFee)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("shippingFee");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasColumnName("status");
             entity.Property(e => e.TotalPrice)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("totalPrice");
@@ -282,6 +288,20 @@ public partial class OnlinePharmacyContext : DbContext
             entity.Property(e => e.ParentId)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("parentId");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__User__3213E83FB53F25BD");
+
+            entity.ToTable("User");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
+            entity.Property(e => e.Password).HasColumnName("password");
+            entity.Property(e => e.Username).HasColumnName("username");
         });
 
         OnModelCreatingPartial(modelBuilder);

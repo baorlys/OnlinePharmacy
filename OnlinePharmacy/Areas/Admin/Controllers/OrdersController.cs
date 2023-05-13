@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OnlinePharmacy.Models;
 
 namespace OnlinePharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class OrdersController : Controller
+    [Route("Admin/[controller]/[action]/{id?}")]
+
+    public class OrdersController : AdminBaseController
     {
         private readonly OnlinePharmacyContext _context;
 
@@ -20,10 +23,15 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
         }
 
         // GET: Admin/Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string status)
         {
-            var onlinePharmacyContext = _context.Orders.Include(o => o.Customer);
-            return View(await onlinePharmacyContext.ToListAsync());
+            var orders = _context.Orders.Include(o => o.Customer).Where(p => p.Status == "Pending");
+            if (!string.IsNullOrEmpty(status))
+            {
+                var onlinePharmacyContext = _context.Orders.Include(o => o.Customer).Where(p => p.Status == status);
+                return View(onlinePharmacyContext.ToList());
+            }
+            return View(orders.ToList());
         }
 
         // GET: Admin/Orders/Details/5
@@ -37,6 +45,8 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
             var order = await _context.Orders
                 .Include(o => o.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            var orderDetail = _context.OrderDetails.Where(o => o.OrderId == id);
+            ViewBag.orderDetail = orderDetail.ToList();
             if (order == null)
             {
                 return NotFound();
@@ -77,7 +87,9 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = _context.Orders.Include(o => o.Customer).FirstOrDefault(x => x.Id == id);
+            var orderDetail = _context.OrderDetails.Where(o => o.OrderId == id);
+            ViewBag.orderDetail = orderDetail.ToList();
             if (order == null)
             {
                 return NotFound();
@@ -163,6 +175,52 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
         private bool OrderExists(int id)
         {
           return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpPost, ActionName("Accept")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptConfirmed(int id)
+        {
+            if (_context.Orders == null)
+            {
+                return Problem("Entity set 'OnlinePharmacyContext.Orders'  is null.");
+            }
+            var order = await _context.Orders.FindAsync(id);
+            if (order != null)
+            {
+                order.Status = "Completed";
+                order.ModifiedAt = DateTime.Now;
+                _context.Orders.Update(order);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpPost, ActionName("Cancel")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelConfirmed(int id)
+        {
+            if (_context.Orders == null)
+            {
+                return Problem("Entity set 'OnlinePharmacyContext.Orders'  is null.");
+            }
+            var order = await _context.Orders.FindAsync(id);
+            if (order != null)
+            {
+                order.Status = "Cancelled";
+                order.ModifiedAt = DateTime.Now;
+                _context.Orders.Update(order);
+                var orderDetail = _context.OrderDetails.Include(c => c.Product).Where(o => o.OrderId == id).ToList();
+                foreach(OrderDetail detail in orderDetail)
+                {
+                    var product = detail.Product;
+                    product.Inventory = product.Inventory + detail.Quantity;
+                    _context.Products.Update(product);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

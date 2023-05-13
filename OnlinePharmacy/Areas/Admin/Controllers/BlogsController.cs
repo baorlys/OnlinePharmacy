@@ -15,12 +15,11 @@ using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using ValidateAntiForgeryTokenAttribute = Microsoft.AspNetCore.Mvc.ValidateAntiForgeryTokenAttribute;
-
 namespace OnlinePharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class BlogsController : Controller
+    public class BlogsController : AdminBaseController
     {
         private readonly OnlinePharmacyContext _context;
 
@@ -131,7 +130,6 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
                 return NotFound();
             }
             var blogTags = _context.BlogTags.ToList();
-            ViewBag.Hihi = blogTags;
             ViewBag.PageTags = blogTags;
             return View(blog);
         }

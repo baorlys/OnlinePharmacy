@@ -1,0 +1,46 @@
+﻿@model OnlinePharmacy.Areas.Admin.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng kí";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Đăng kí</h2>
+            <form asp-action="Register" method="post" class="needs-validation" novalidate>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="form-label"></label>
+                    <input asp-for="Username" class="form-control" required />
+                    <div class="invalid-feedback">
+                        Please enter your username.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" required />
+                    <div class="invalid-feedback">
+                        Please enter your email address.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" type="password" required />
+                    <div class="invalid-feedback">
+                        Please enter your password.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" required />
+                    <div class="invalid-feedback">
+                        Please confirm your password.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng kí</button>
+                <a href="/Admin/Users/Login">Bạn đã có tài khoản ? Đăng nhập</a>
+            </form>
+        </div>
+    </div>
+</div>

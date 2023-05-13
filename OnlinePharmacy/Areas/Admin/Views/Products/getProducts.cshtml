@@ -1,0 +1,77 @@
+﻿@model IEnumerable<OnlinePharmacy.Models.Product>
+<table id="zero_config"
+	   class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>STT</th>
+			<th>Tên</th>
+			<th>Ảnh</th>
+			<th>Loại</th>
+			<th>Tồn kho</th>
+			<th>Giá</th>
+			<th>Đơn vị bán</th>
+			<th>Thao tác</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var stt = 1;
+		}
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@Html.Raw(stt++)</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					<img src="~/images/product/@item.Image" style="width:100px">
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Category.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Inventory)
+				</td>
+				<td>
+					@Convert.ToDecimal(item.Price).ToString("n0")đ
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Unit)
+				</td>
+				<td class="nowrap">
+
+					@Html.NoEncodeActionLink(
+				"<span class='mdi mdi-table-edit'></span>",
+				"Edit",
+				"Products",
+				"Admin",
+				new {id = @item.Id},
+				new { @class = "btn btn-warning" })
+
+
+
+					@Html.NoEncodeActionLink(
+				"<span class='mdi mdi-delete'></span>",
+				"Delete",
+				"Products",
+				"Admin",
+				new {id = @item.Id},
+				new { @class = "btn btn-danger" })
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@section Scripts {
+	<script src="~/admin/assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+	<script src="~/admin/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+	<script src="~/admin/assets/extra-libs/DataTables/datatables.min.js"></script>
+	<script>
+			   ${ }
+			   /****************************************
+		*       Basic Table                   *
+		****************************************/
+	</script>
+}

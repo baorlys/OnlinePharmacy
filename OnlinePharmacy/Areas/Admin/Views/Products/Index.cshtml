@@ -1,0 +1,103 @@
+﻿@model OnlinePharmacy.Models.ProductCategory
+@{
+	ViewData["Title"] = "Quản lý Sản phẩm";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/extra-libs/multicheck/multicheck.css" />
+	<link href="~/admin/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css"
+	  rel="stylesheet" />
+}
+
+	<div class="page-wrapper">
+
+		<div class="page-breadcrumb">
+			<div class="row">
+				<div class="col-12 d-flex no-block align-items-center">
+					<h4 class="page-title">@ViewData["Title"]</h4>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+
+			<div class="row">
+				<div class="col-12">
+
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Danh sách</h5>
+
+
+
+
+							<div class="table-responsive">
+								<div class="container-fluid">
+									<div class="d-flex justify-content-between mb-2">
+
+										<div>
+										</div>
+										<div>
+											<div class="btn-group">
+												@Html.DropDownListFor(model => model.Id, (SelectList)ViewBag.Category,"---Tất cả sản phẩm---",
+											new{@class="form-control",@id="category"})
+											</div>
+											<div class="btn-group">
+												@Html.NoEncodeActionLink(
+											" <span class='mdi mdi-plus'>Thêm mới</span>",
+											"Create",
+											"Products",
+											"Admin",
+											null,
+											new { @class = "btn btn-primary" })
+											</div>
+
+										</div>
+
+									</div>
+									<div id="getProduct"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		@section Scripts {
+		<script src="~/admin/assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+		<script src="~/admin/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+		<script src="~/admin/assets/extra-libs/DataTables/datatables.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				function getProduct() {
+					var categoryId = $("#category").val()
+					console.log(categoryId)
+					$.ajax({
+						url: '/Admin/Products/GetProducts/',
+						type: "GET",
+						data: { id: categoryId },
+						success: function (data) {
+							$("#getProduct").html(data)
+						},
+						error: function (xhr, status, error) {
+							var errorMessage = xhr.status + ': ' + xhr.statusText
+							console.log(errorMessage)
+							alert("Something went wrong. Please try again later.")
+						}
+					})
+				}
+				getProduct()
+				$("#category").change(function () {
+					getProduct()
+				})
+			})
+
+		</script>
+	}

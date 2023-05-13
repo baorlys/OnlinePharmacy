@@ -202,6 +202,7 @@ namespace OnlinePharmacy.Controllers
                 var order = new Order
                 {
                     CustomerId = cusId,
+                    Status = "Pending",
                     ShippingAddress = customer.Address,
                     ShippingFee = 0,
                     TotalPrice = totalPrice,

@@ -1,10 +1,9 @@
-﻿@model OnlinePharmacy.Models.Blog
+﻿@model OnlinePharmacy.Models.Product
+
 @{
-	ViewData["Title"] = "Chỉnh sửa";
+	ViewData["Title"] = "Thêm mới";
 	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
-
 
 @section Head{
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
@@ -19,6 +18,7 @@
 	<link rel="stylesheet"
 	  type="text/css"
 	  href="~/admin/assets/libs/quill/dist/quill.snow.css" />
+
 }
 	<div class="page-wrapper">
 		<div class="page-breadcrumb">
@@ -34,23 +34,32 @@
 			<div class="col-md-6">
 				<div class="card">
 					<div class="card-body">
-						<form asp-action="Edit" method="post" enctype="multipart/form-data">
-							<h5 class="card-title">Blog</h5>
-							<input type="text"
-							   asp-for="Id"
-							   id="id"
-							   class="form-control"
-							   value="@Model.Id" hidden />
+						<form asp-action="Create" method="post" enctype="multipart/form-data">
+							<h5 class="card-title">Sản phẩm</h5>
 							<div class="form-group row">
-								<label class="col-md-3" for="title">Tiêu đề</label>
+								<label class="col-md-3" for="title">Danh mục</label>
+								<div class="col-md-9">
+									@Html.DropDownListFor(model => model.CategoryId, (SelectList)ViewBag.Category,
+												new{@class="form-control"})
+								</div>
+								<span asp-validation-for="CategoryId" class="text-danger"></span>
+							</div>
+							<div class="form-group row">
+								<label class="col-md-3" for="title">Tên</label>
 								<div class="col-md-9">
 									<input type="text"
-									   asp-for="Title"
-									   id="title"
-									   class="form-control"
-									   value="@Model.Title" />
+									   asp-for="Name"
+									   id="name"
+									   class="form-control" />
 								</div>
-								<span asp-validation-for="Title" class="text-danger"></span>
+								@Html.ValidationMessageFor(model => model.Name,"", new {@class="text-danger"})
+							</div>
+							<div class="form-group row">
+								<label class="col-md-3" for="imageFile">Ảnh</label>
+								<div class="col-md-9">
+									<input type="file" name="imageFile" id="imageInput">
+									<img id="imagePreview" src="#" alt="Image Preview" style="width:300px" />
+								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-md-3" for="meta">Meta</label>
@@ -59,113 +68,59 @@
 									   asp-for="Meta"
 									   id="meta"
 									   class="form-control"
-									   value ="@Model.Meta"
-									    />
+									    disabled/>
 								</div>
 							</div>
 							<div class="form-group row">
-								<label class="col-md-3" for="author">Tác giả</label>
+								<label class="col-md-3" for="title">Số lượng</label>
 								<div class="col-md-9">
-									<input type="text"
-									   asp-for="Author"
-									   id="author"
+									<input type="number"
+									   asp-for="Inventory"
+									   id="inventory"
 									   class="form-control"
-									   value="@Model.Author" />
+									   min=0/>
 								</div>
-								<span asp-validation-for="Author" class="text-danger"></span>
+								@Html.ValidationMessageFor(model => model.Inventory,"", new {@class="text-danger"})
 							</div>
 							<div class="form-group row">
-								<label class="col-md-3" for="content">Nội dung</label>
+								<label class="col-md-3" for="title">Mô tả</label>
 								<div class="col-md-9">
-									<textarea id="content"
-										  class="form-control"
-										  name="content">@Model.Content</textarea>
-								</div>
-								<span asp-validation-for="Content" class="text-danger"></span>
-
-							</div>
-
-							<div class="form-group row">
-								<label class="col-md-3" for="summary">Tóm tắt</label>
-								<div class="col-md-9">
-									<textarea asp-for="Summary"
+									<textarea asp-for="Desc"
 										  id="summary"
 										  class="form-control"
-										  row="2"
-										  value="@Model.Summary"></textarea>
+										  row="5"></textarea>
 								</div>
-								<span asp-validation-for="Summary" class="text-danger"></span>
-
+								@Html.ValidationMessageFor(model => model.Desc,"", new {@class="text-danger"})
 							</div>
 							<div class="form-group row">
-								<label class="col-md-3" for="imageFile">Ảnh thumb</label>
+								<label class="col-md-3" for="title">Giá</label>
 								<div class="col-md-9">
-									<input name="thumbName" value="@Model.Thumb" hidden>
-									<input type="file" name="imageFile" id="imageInput" asp-for="Thumb">
-									<img id="imagePreview" src="~/images/blog/@Model.Thumb" alt="Image Preview" style="width:300px" />
+									<input type="text"
+									   asp-for="Price"
+									   id="price"
+									   class="form-control" />
 								</div>
+								@Html.ValidationMessageFor(model => model.Price,"", new {@class="text-danger"})
 							</div>
 							<div class="form-group row">
-								<label class="col-md-3" for="tags">Tags</label>
+								<label class="col-md-3" for="title">Đơn vị bán</label>
 								<div class="col-md-9">
-									<select class="form-control" name="tagArr" id="tags" multiple>
-
-										@{
-										List<int> intTagList = new List<int>();
-
-										if (Model.Tags != null)
-										{
-											var tagList = Model.Tags.Split(",");
-											foreach (var tag in tagList)
-											{
-												intTagList.Add(int.Parse(tag));
-											}
-
-										}
-
-									}
-									@if(ViewBag.PageTags != null) {
-									@foreach (var tag in ViewBag.PageTags)
-									{
-										if (intTagList.Contains(tag.Id))
-										{
-											<option value="@tag.Id" selected>@tag.Name</option>
-										}
-										else
-										{
-											<option value="@tag.Id">@tag.Name</option>
-
-										}
-									}
-									}
-								</select>
+									<input type="text"
+									   asp-for="Unit"
+									   id="unit"
+									   class="form-control" />
+								</div>
+								@Html.ValidationMessageFor(model => model.Unit,"", new {@class="text-danger"})
 							</div>
-						</div>
+
+
 						<input type="text"
 							   asp-for="CreateAt"
 							   id="createAt"
 							   class="form-control"
-							   value="@Model.CreateAt" hidden />
-
-						<input type="text"
-							   asp-for="ModifiedAt"
-							   id="modifiedAt"
-							   class="form-control"
 							   value="@DateTime.Now" hidden />
 						<div class="form-group row">
-
-							<div class="col-md-2">
-								@Html.NoEncodeActionLink(
-								"<span class='mdi mdi-arrow-left-bold'>Trở lại</span>",
-								"Index",
-								"Blogs",
-								"Admin",
-								null,
-								new { @class = "btn btn-primary" })
-							</div>
-							<div class="col-md-2">
-								<input type="submit" value="Lưu" class="btn btn-primary" />
-							</div>
+							<input type="submit" value="Thêm mới" class="btn btn-primary" />
 						</div>
 					</form>
 				</div>
@@ -194,12 +149,7 @@
 	<script src="~/admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 	<script src="~/admin/assets/libs/quill/dist/quill.min.js"></script>
 	<script>
-		$(document).ready(function () {
-			$('#tags').select2({
-				tags: true,
-				tokenSeparators: [',', ' ']
-			});
-		});
+
 		var imageInput = document.getElementById("imageInput");
 		var imagePreview = document.getElementById("imagePreview");
 
@@ -227,22 +177,56 @@
 			return str;
 		}
 		$(function () {
-			$("#title").keyup(function () {
+			$("#name").keyup(function () {
 				var text = $.trim($(this).val())
 				text = removeVietnameseAccent(text);
 				var textCreate = text.replace(/\s+/g, '-').toLowerCase();
-				document.getElementById("meta").value = textCreate;
+				console.log(text)
 				$("#meta").val(textCreate)
 			}).keyup()
 		})
 		
-		var editor = CKEDITOR.replace("content")
+		CKEDITOR.replace("content")
+
 		//***********************************//
 		// For select 2
 		//***********************************//
 		$(".select2").select2();
 
+		/*colorpicker*/
+		$(".demo").each(function () {
+			//
+			// Dear reader, it's actually very easy to initialize MiniColors. For example:
+			//
+			//  $(selector).minicolors();
+			//
+			// The way I've done it below is just for the demo, so don't get confused
+			// by it. Also, data- attributes aren't supported at this time...they're
+			// only used for this demo.
+			//
+			$(this).minicolors({
+				control: $(this).attr("data-control") || "hue",
+				position: $(this).attr("data-position") || "bottom left",
 
+				change: function (value, opacity) {
+					if (!value) return;
+					if (opacity) value += ", " + opacity;
+					if (typeof console === "object") {
+						console.log(value);
+					}
+				},
+				theme: "bootstrap",
+			});
+		});
+		/*datwpicker*/
+		jQuery(".mydatepicker").datepicker();
+		jQuery("#datepicker-autoclose").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+		});
+		var quill = new Quill("#editor", {
+			theme: "snow",
+		});
 
 	</script>
 	}

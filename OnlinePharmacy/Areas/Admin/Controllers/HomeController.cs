@@ -6,7 +6,7 @@ namespace OnlinePharmacy.Areas.Admin.Controllers
     [Route("Admin")]
     [Route("quan-ly")]
 
-    public class HomeController : Controller
+    public class HomeController : AdminBaseController
     {
         public IActionResult Index()
         {

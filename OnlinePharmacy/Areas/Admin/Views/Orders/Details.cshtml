@@ -1,73 +1,225 @@
 ﻿@model OnlinePharmacy.Models.Order
-
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout2.cshtml";
+	ViewData["Title"] = "Chi tiết";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+	var orderDetail = ViewBag.orderDetail;
+	int stt = 1;
 }
+@section Head{
+	<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+	<script src="js/elfinder.min.js"></script>
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/select2/dist/css/select2.min.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/libs/quill/dist/quill.snow.css" />
+}
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-family: Arial, sans-serif;
+		}
 
-<h1>Details</h1>
+		th, td {
+			text-align: left;
+			padding: 8px;
+		}
 
-<div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaymentMethod)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaymentMethod)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaymentStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaymentStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ShippingAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ShippingAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ShippingFee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ShippingFee)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreateAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeletedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeletedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Customer.Id)
-        </dd>
-    </dl>
+		th {
+			background-color: #f2f2f2;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		h5 {
+			margin: 0;
+			font-size: 16px;
+			font-weight: bold;
+		}
+
+		table input[type="text"] {
+			border: none;
+			text-align: center;
+			font-size: 16px;
+			font-weight: bold;
+			width: 50px;
+			background-color: transparent;
+		}
+
+			table input[type="text"]:disabled {
+				color: #999;
+			}
+	</style>
+	<div class="page-wrapper">
+		<div class="page-breadcrumb">
+			<div class="row">
+				<div class="col-12 d-flex no-block align-items-center">
+					<h4 class="page-title">@ViewData["Title"]</h4>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="col-md-6">
+				<div class="card">
+					<h3>Thông tin đơn hàng</h3>
+					<div class="card-body">
+						<h5 class="card-title">Đơn hàng @Model.Id</h5>
+						<div class="form-group row">
+							<label class="col-md-3" for="title">Khách hàng</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="title"
+								   class="form-control"
+								   placeholder="@Model.Customer.Name"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-md-3" for="title">Địa chỉ</label>
+							<div class="col-md-9">
+								<input type="text"
+								   id="title"
+								   class="form-control"
+								   placeholder="@Model.ShippingAddress"
+								   disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<h4 style="font-weight:bold">Danh sách sản phẩm</h4>
+							<table>
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Mã sản phẩm</th>
+										<th>Số lượng</th>
+									</tr>
+								</thead>
+								<tbody>
+								@foreach (var detail in orderDetail)
+								{
+									<tr>
+										<td>@(stt++)</td>
+										<td>
+											<h5>@detail.ProductId</h5>
+										</td>
+										<td>
+											<div>
+												<div>
+													<input type="text" value="@detail.Quantity" disabled />
+												</div>
+											</div>
+										</td>
+									</tr>
+
+								}
+							</tbody>
+						</table>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							@Html.NoEncodeActionLink(
+							"<span class='mdi mdi-arrow-left-bold'>Trở lại</span>",
+							"Index",
+							"Orders",
+							"Admin",
+							null,
+							new { @class = "btn btn-warning" })
+						</div>
+						@if (Model.Status == "Pending")
+						{
+							<div class="col-md-2">
+
+								@Html.NoEncodeActionLink(
+							"<span>Xử lí</span>",
+							"Edit",
+							"Orders",
+							"Admin",
+							new {id = @Model.Id},
+							new { @class = "btn btn-info" })
+
+							</div>
+						}
+
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+	<script src="~/admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+	<script src="~/admin/dist/js/pages/mask/mask.init.js"></script>
+	<script src="~/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
+	<script src="~/admin/assets/libs/select2/dist/js/select2.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js"></script>
+	<script src="~/admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
+	<script src="~/admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
+	<script src="~/admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="~/admin/assets/libs/quill/dist/quill.min.js"></script>
+	<script>
+		//***********************************//
+		// For select 2
+		//***********************************//
+		$(".select2").select2();
+
+		/*colorpicker*/
+		$(".demo").each(function () {
+			//
+			// Dear reader, it's actually very easy to initialize MiniColors. For example:
+			//
+			//  $(selector).minicolors();
+			//
+			// The way I've done it below is just for the demo, so don't get confused
+			// by it. Also, data- attributes aren't supported at this time...they're
+			// only used for this demo.
+			//
+			$(this).minicolors({
+				control: $(this).attr("data-control") || "hue",
+				position: $(this).attr("data-position") || "bottom left",
+
+				change: function (value, opacity) {
+					if (!value) return;
+					if (opacity) value += ", " + opacity;
+					if (typeof console === "object") {
+						console.log(value);
+					}
+				},
+				theme: "bootstrap",
+			});
+		});
+		/*datwpicker*/
+		jQuery(".mydatepicker").datepicker();
+		jQuery("#datepicker-autoclose").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+		});
+		var quill = new Quill("#editor", {
+			theme: "snow",
+		});
+	</script>
+	}
+
+
+

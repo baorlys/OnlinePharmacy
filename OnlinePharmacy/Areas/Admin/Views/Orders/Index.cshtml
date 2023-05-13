@@ -1,84 +1,193 @@
 ﻿@model IEnumerable<OnlinePharmacy.Models.Order>
-
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout2.cshtml";
+	ViewData["Title"] = "Quản lý Đơn hàng";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentMethod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShippingAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShippingFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeletedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentMethod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeletedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@section Head{
+	<link rel="stylesheet"
+	  type="text/css"
+	  href="~/admin/assets/extra-libs/multicheck/multicheck.css" />
+	<link href="~/admin/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css"
+	  rel="stylesheet" />
 }
-    </tbody>
-</table>
+
+	<div class="page-wrapper">
+
+		<div class="page-breadcrumb">
+			<div class="row">
+				<div class="col-12 d-flex no-block align-items-center">
+					<h4 class="page-title">@ViewData["Title"]</h4>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+
+			<div class="row">
+				<div class="col-12">
+
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Danh sách</h5>
+
+
+
+
+							<div class="table-responsive">
+								<div class="container-fluid">
+									<div class="d-flex justify-content-between mb-2">
+
+										<div>
+										</div>
+										<div>
+											<div class="form-group">
+												<label for="filterStatus">Lọc theo trạng thái:</label>
+												<select id="filterStatus" name="filterStatus">
+													<option value="">Tất cả</option>
+													<option value="Pending" selected>Đang chờ xử lý</option>
+													<option value="Completed">Hoàn thành</option>
+													<option value="Cancelled">Đã hủy</option>
+												</select>
+											</div>
+
+										</div>
+
+									</div>
+									<table id="zero_config"
+									   class="table table-striped table-bordered">
+										<thead>
+											<tr>
+												<th>STT</th>
+												<th>Khách hàng</th>
+												<th>SĐT</th>
+												<th>Địa chỉ giao hàng</th>
+												<th>Tổng hoá đơn</th>
+												<th>Phương thức thanh toán</th>
+												<th>Trạng thái</th>
+												<th>Ngày tạo</th>
+												<th>Ngày xử lí</th>
+												<th>Thao tác</th>
+											</tr>
+										</thead>
+										<tbody>
+											@{
+											var stt = 1;
+										}
+										@foreach (var item in Model)
+										{
+											<tr>
+												<td>@Html.Raw(stt++)</td>
+												<td>
+													@Html.DisplayFor(modelItem => item.Customer.Name)
+												</td>
+												<td>
+													@Html.DisplayFor(modelItem => item.Customer.Phone)
+												</td>
+												<td>
+													@Html.DisplayFor(modelItem => item.ShippingAddress)
+												</td>
+												<td>
+													@Convert.ToDecimal(item.TotalPrice).ToString("n0")đ
+												</td>
+												@{
+													var paymentMethodVN = "tiền mặt";
+													if (item.PaymentMethod == "momo-cash")
+													{
+														paymentMethodVN = "momo";
+													}
+												}
+												<td>
+													@paymentMethodVN
+												</td>
+												@{
+													var color = "yellow";
+													var statusVN = "Đang chờ xử lý";
+													if (item.Status == "Completed")
+													{
+														color = "green";
+														statusVN = "Hoàn thành";
+													}
+													else if (item.Status == "Cancelled")
+													{
+														color = "red";
+														statusVN = "Đã huỷ";
+													}
+
+												}
+												<td style="color:white;background-color: @color">
+													@statusVN
+												</td>
+
+
+												<td>
+													@Html.DisplayFor(modelItem => item.CreateAt)
+												</td>
+												<td>
+													@Html.DisplayFor(modelItem => item.ModifiedAt)
+												</td>
+												<td class="nowrap">
+													@Html.NoEncodeActionLink(
+												"<span class='mdi mdi-details'></span>",
+												"Details",
+												"Orders",
+												"Admin",
+												new {id = @item.Id},
+												new { @class = "btn btn-info" })
+
+													@if (item.Status == "Pending")
+													{
+														@Html.NoEncodeActionLink(
+												"<span class='mdi mdi-table-edit'></span>",
+												"Edit",
+												"Orders",
+												"Admin",
+												new {id = @item.Id},
+												new { @class = "btn btn-warning" })
+
+
+
+
+													}
+
+												</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+@section Scripts {
+	<script src="~/admin/assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+	<script src="~/admin/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+	<script src="~/admin/assets/extra-libs/DataTables/datatables.min.js"></script>
+	<script>
+		/****************************************
+		 *       Basic Table                   *
+		 ****************************************/
+		$("#zero_config").DataTable();
+		$(document).ready(function () {
+			// Filter orders by status
+			$('#filterStatus').change(function () {
+				var selectedStatus = $(this).val();
+				var url = '@Url.Action("Index", "Orders", new { area = "Admin" })';
+				if (selectedStatus) {
+					url += '?status=' + selectedStatus;
+				}
+				window.location.href = url;
+			});
+		});
+	</script>
+	}
